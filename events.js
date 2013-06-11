@@ -221,11 +221,13 @@ EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
 EventEmitter.prototype.once = function(type, listener) {
   var self = this;
-  self.on(type, function g() {
-    self.removeListener(type, g);
-    listener.apply(this, arguments);
-  });
 
+  function g() {
+      self.removeListener(type, g);
+      listener.apply(this, arguments);
+  }
+
+  self.on(type, g);
   return this;
 };
 
